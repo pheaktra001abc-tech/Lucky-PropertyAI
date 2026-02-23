@@ -73,3 +73,4 @@ if prompt := st.chat_input("សួរអ្វីមួយមកកាន់ Luc
         message_placeholder.markdown(full_response)
     
     st.session_state.messages.append({"role": "assistant", "content": full_response})
+    
