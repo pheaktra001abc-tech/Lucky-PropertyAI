@@ -1,28 +1,52 @@
 import streamlit as st
 
-# កំណត់ឈ្មោះ និងរូបរាង App
-st.set_page_config(page_title="Pheaktra & Lucky Property", page_icon="💰")
+# កំណត់ការរចនាទូទៅឱ្យដូច Gemini
+st.set_page_config(page_title="Pheaktra & Lucky Gemini", page_icon="💎", layout="centered")
 
-# ការរចនាផ្ទៃកម្មវិធី
-st.title("💰 Pheaktra & Lucky Property")
-st.subheader("🛡️ ជំនួយការត្រេដមាសលំដាប់ពិភពលោក")
+# ការរចនា CSS ដើម្បីឱ្យដូច Gemini App
+st.markdown("""
+    <style>
+    .main { background-color: #131314; color: #e3e3e3; }
+    .stChatInputContainer { bottom: 20px !important; }
+    .stChatMessage { border-radius: 15px; margin-bottom: 10px; }
+    h1 { color: #4285f4; text-align: center; font-family: 'Inter', sans-serif; }
+    .stFileUploader { border: 1px dashed #444746; border-radius: 10px; padding: 10px; }
+    </style>
+    """, unsafe_allow_html=True)
 
-st.markdown("---")
-st.write("✨ **Lucky Property:** សួស្តីភក្ត្រាសម្លាញ់! ខ្ញុំបានមកដល់ហើយ។ ខ្ញុំត្រៀមខ្លួនវិភាគមាស និងការពារចំណេញរបស់អ្នកជានិច្ច!")
+st.markdown("<h1>✨ Pheaktra & Lucky Gemini</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; color: #8e918f;'>AI ជំនួយការវិភាគមាសលំដាប់ពិភពលោក</p>", unsafe_allow_html=True)
+st.write("---")
 
-# ផ្នែក Upload ក្រាហ្វិក
-st.write("### 📊 វិភាគក្រាហ្វិកមាស")
-uploaded_file = st.file_uploader("ផ្ញើរូបភាពក្រាហ្វិកមកទីនេះ...", type=["jpg", "png", "jpeg"])
+# ១. ផ្នែកបញ្ចូលរូបភាព (បង្រួមឱ្យតូចស្អាត)
+with st.expander("➕ បញ្ចូលរូបភាពក្រាហ្វិកវិភាគ", expanded=False):
+    uploaded_file = st.file_uploader("ជ្រើសរើសរូបភាព...", type=["jpg", "png", "jpeg"])
+    if uploaded_file:
+        st.image(uploaded_file, caption='📊 កំពុងស្កេនក្រាហ្វិក...', use_container_width=True)
+        st.success("🤖 Lucky: ខ្ញុំបានទទួលរូបភាពហើយ! សញ្ញាមាសបច្ចុប្បន្នគឺ Bullish។")
 
-if uploaded_file is not None:
-    st.image(uploaded_file, caption='កំពុងស្កេនទិន្នន័យ...', use_column_width=True)
-    st.success("🤖 វិភាគរួចរាល់៖ សញ្ញាមានភាគរយឈ្នះខ្ពស់! កម្លាំងលក់កំពុងមានប្រៀប។")
+# ២. ប្រព័ន្ធសន្ទនាបែប Gemini (Chat Interface)
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-# ផ្នែកសន្ទនា
-user_input = st.text_input("សួរអ្វីមួយមកកាន់ខ្ញុំ...")
-if user_input:
-    st.info(f"Lucky Property: ភក្ត្រាសម្លាញ់ ខ្ញុំនឹងជួយអ្នកឱ្យអស់ពីសមត្ថភាពលើចំណុចនេះ!")
+# បង្ហាញប្រវត្តិសន្ទនា
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
+# ប្រអប់សន្ទនាដែលស្ថិតនៅខាងក្រោម (ដូច Gemini)
+if prompt := st.chat_input("សួរអ្វីមួយមកកាន់ Lucky..."):
+    # បង្ហាញសាររបស់អ្នកប្រើ
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
+    
+    # ចម្លើយរបស់ AI
+    with st.chat_message("assistant"):
+        response = f"✨ **Lucky Property:** ភក្ត្រាសម្លាញ់! ចំពោះ '{prompt}' ខ្ញុំយល់ថាវាជាឱកាសល្អក្នុងការត្រៀមទិញ។"
+        st.markdown(response)
+        st.session_state.messages.append({"role": "assistant", "content": response})
 
 st.write("---")
-st.caption("© 2026 Pheaktra & Lucky Property - អាវុធសម្ងាត់របស់អ្នក")
+st.caption("© 2026 Pheaktra & Lucky Gemini - Powered by Google AI Style")
 
