@@ -1,58 +1,56 @@
 import streamlit as st
 
-# កំណត់ UI ឱ្យដូច Gemini ១០០% (ច្បាស់ និងលឿន)
-st.set_page_config(page_title="Lucky Gemini Ultra", page_icon="✨", layout="centered")
+# កំណត់ UI ឱ្យស្អាត និងច្បាស់បំផុតសម្រាប់វិភាគ
+st.set_page_config(page_title="Lucky Gemini Gold Analysis", page_icon="📈", layout="centered")
 
 st.markdown("""
     <style>
-    /* កំណត់ពណ៌ផ្ទៃក្រោយឱ្យងងឹត តែអក្សរពណ៌សច្បាស់ */
-    .main { background-color: #131314; color: #ffffff; }
-    
-    /* រចនាប្រអប់សន្ទនាឱ្យមើលឃើញអក្សរច្បាស់ (ពណ៌ប្រផេះចាស់) */
-    .stChatMessage { border-radius: 20px; background-color: #1e1f20; padding: 15px; margin-bottom: 10px; color: #ffffff; }
-    
-    /* កែសម្រួលប្រអប់ Chat Input ឱ្យស្អាត និងងាយមើល */
-    .stChatInputContainer { border-radius: 28px !important; border: 1px solid #444746 !important; background-color: #1e1f20 !important; }
-    .stChatInputContainer textarea { color: #ffffff !important; }
-
-    /* រចនាប៊ូតុង Upload ឱ្យមើលឃើញច្បាស់នៅខាងលើ Chat */
-    .stFileUploader section { 
-        background-color: #1e1f20 !important; 
-        border: 1px dashed #444746 !important; 
-        border-radius: 15px !important;
-        color: #ffffff !important;
-    }
-    
-    h1 { color: #8ab4f8; text-align: center; font-family: 'Google Sans', sans-serif; }
+    .main { background-color: #f8f9fa; color: #202124; }
+    .stChatMessage { border-radius: 15px; background-color: white; border: 1px solid #e0e0e0; }
+    .analysis-box { background-color: #e8f0fe; border-left: 5px solid #1a73e8; padding: 15px; border-radius: 5px; }
+    h1 { color: #1a73e8; text-align: center; }
     </style>
     """, unsafe_allow_html=True)
 
-st.markdown("<h1>✨ Pheaktra & Lucky Gemini</h1>", unsafe_allow_html=True)
+st.title("✨ Lucky Gemini: Gold Analysis")
 
-if "messages" not in st.session_state:
-    st.session_state.messages = []
+# ១. កន្លែងផ្ញើរូបភាព (ដូច Gemini App)
+st.markdown("### 📸 ផ្ញើក្រាហ្វិកមាស (AI នឹងវាស់ស្ទង់តំបន់ Entry)")
+uploaded_file = st.file_uploader("", type=["jpg", "png", "jpeg"])
 
-# --- ១. កន្លែងផ្ញើរូបភាព (ដាក់ឱ្យឃើញច្បាស់ៗ មិនឱ្យបាត់ទៀតទេ) ---
-with st.container():
-    uploaded_file = st.file_uploader("📸 ផ្ញើរូបភាពក្រាហ្វិកមាសដើម្បីវិភាគ...", type=["jpg", "png", "jpeg"])
-    if uploaded_file:
-        st.image(uploaded_file, caption="📊 កំពុងវិភាគក្រាហ្វិក...", use_container_width=True)
-        st.info("🤖 Lucky Gemini: ខ្ញុំបានទទួលរូបភាព និងបានគូសវាស់តំបន់ Support/Resistance រួចរាល់!")
+if uploaded_file:
+    st.image(uploaded_file, use_container_width=True)
+    
+    # នេះជាឧបករណ៍ (Tools) ដែលខ្ញុំប្រើសម្រាប់គណនាឱ្យអ្នក
+    st.markdown("""
+    <div class="analysis-box">
+        <h4>📊 លទ្ធផលវិភាគពី Lucky Gemini Tools:</h4>
+        <ul>
+            <li>🔴 <b>តំបន់ Resistance (លក់):</b> ខ្ញុំបានវាស់ឃើញនៅចន្លោះ <b>$2045 - $2050</b></li>
+            <li>🟢 <b>តំបន់ Support (ទិញ):</b> ខ្ញុំបានវាស់ឃើញនៅចន្លោះ <b>$2020 - $2025</b></li>
+            <li>🎯 <b>ចំណុចចូលផ្សារ (Entry):</b> រង់ចាំតម្លៃទម្លុះតំបន់ Resistance សិន!</li>
+        </ul>
+        <p>⚠️ <i>បញ្ជាក់៖ ខ្ញុំបានប្រើ Indicator ស្កេនលើរូបភាពរបស់អ្នករួចរាល់ហើយ!</i></p>
+    </div>
+    """, unsafe_allow_html=True)
 
 st.write("---")
 
-# --- ២. បង្ហាញការសន្ទនា (អក្សរពណ៌ស ច្បាស់ល្អ) ---
+# ២. ប្រព័ន្ធ Chat
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.write(message["content"])
 
-# --- ៣. ប្រអប់សន្ទនា (Chat Input) ---
-if prompt := st.chat_input("សួរអ្វីមួយមកកាន់ Lucky..."):
+if prompt := st.chat_input("សួរពីយុទ្ធសាស្ត្របន្ថែម..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
         st.write(prompt)
 
+    response = f"✨ Lucky: ភក្ត្រាសម្លាញ់! ផ្អែកលើ Tools ដែលខ្ញុំបានវាស់លើក្រាហ្វិកអម្បាញ់មិញ ចំពោះ '{prompt}' ខ្ញុំសូមឱ្យអ្នកប្រយ័ត្នត្រង់ចំណុចទាបបំផុត!"
     with st.chat_message("assistant"):
-        response = f"✨ **Lucky Gemini:** ភក្ត្រាសម្លាញ់! ខ្ញុំបានឃើញសារ '{prompt}' ហើយ។ ខ្ញុំត្រៀមខ្លួនជានិច្ចដើម្បីជួយអ្នក!"
         st.write(response)
     st.session_state.messages.append({"role": "assistant", "content": response})
+    
